@@ -1,5 +1,6 @@
 package com.cloudbees.fake.cyberarkfake;
 
+import com.cloudbees.fake.cyberarkfake.exception.ForbiddenException;
 import com.cloudbees.fake.cyberarkfake.pojos.GetPasswordBody;
 import com.cloudbees.fake.cyberarkfake.pojos.LogonBody;
 import org.slf4j.Logger;
@@ -8,12 +9,15 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Base64;
 
-@RestController()
+@RestController
 public class CyberArkFakeEndpoints {
   private final static Logger logger = LoggerFactory.getLogger(CyberArkFakeEndpoints.class);
 
   @PostMapping("/PasswordVault/API/auth/Cyberark/Logon")
-  public String logon(@RequestBody LogonBody logonBody) {
+  public String logon(@RequestBody LogonBody logonBody) throws ForbiddenException {
+    if ("Test".equals(logonBody.getUsername()) && "Test".equals(logonBody.getPassword())) {
+      throw new ForbiddenException("The request requires user authentication.");
+    }
     return "{ \"tok123\"}";
   }
 
