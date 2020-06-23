@@ -25,7 +25,7 @@ public class CyberArkFakeEndpoints {
   @PostMapping("/PasswordVault/API/auth/Cyberark/Logon")
   public String logon(@RequestBody LogonBody logonBody) throws ForbiddenException {
     if (accounts.containsKey(logonBody.getUsername()) && accounts.get(logonBody.getUsername()).getPassword().equals(logonBody.getPassword())) {
-      return new String(Base64.getEncoder().encode(accounts.get(logonBody.getUsername()).getLogin().getBytes()));
+      return "{\"" + accounts.get(logonBody.getUsername()).getLogin() + "\"}";
     } else {
       throw new ForbiddenException("The request requires user authentication.");
     }
@@ -39,7 +39,7 @@ public class CyberArkFakeEndpoints {
     String decodedString = new String(decodedBytes);
     if (accounts.containsKey(decodedString)) {
       logger.info("Decoding authorization header: {}", decodedString);
-      return accounts.get(decodedString).getToken();
+      return "{\"" + accounts.get(decodedString).getToken() + "\"}";
     } else {
       throw new ForbiddenException("The request requires user authentication.");
     }
